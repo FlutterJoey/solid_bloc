@@ -5,9 +5,9 @@ class BasicIncrementBloc extends SolidBloc {
   CounterService _counterService = CounterService();
 
   BasicIncrementBloc() : super(BasicState(0)) {
-    //listeners are always called before transitions...
-    //listeners can be great for event chaining or used when you want to make sure that transitions are also still available.
-    //best to not make this async unless you are not depending of the outcome of the function body in withTransition();
+    // listeners are always called before transitions...
+    // listeners can be great for event chaining or used when you want to make sure that transitions are also still available.
+    // best to not make this async unless you are not depending of the outcome of the function body in withTransition();
     withListener((BasicIncrementEvent event, BasicIncrementBloc bloc) {
       _counterService.increment(amount: event.amount);
       // _counterService.incrementAsync(amount: event.amount); DON'T: high likelyhood that incrementation has not completed before
