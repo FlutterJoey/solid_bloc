@@ -30,10 +30,19 @@ void main() {
     });
 
     test(
-        'mapEventToState shoul yield nothing with no specific listener specified',
+        'mapEventToState should yield nothing with no specific listener specified',
         () {
       sut.withTransition((OtherEvent event) => TargetState());
       Stream s = sut.mapEventToState(SomeEvent());
+
+      s.listen(neverCalled);
+    });
+
+    test('mapEventToState should yield nothing when event was cancelled', () {
+      SomeCancellable cancellable = SomeCancellable();
+      cancellable.cancel();
+      sut.withTransition((SomeCancellable event) => TargetState());
+      Stream s = sut.mapEventToState(cancellable);
 
       s.listen(neverCalled);
     });
@@ -61,11 +70,24 @@ void main() {
         neverCalled();
       });
 
-      sut.withListener((event, bloc) { // this only gets called when a specifically marked SolidBlocEvent is called
+      sut.withListener((event, bloc) {
+        // this only gets called when a specifically marked SolidBlocEvent is called
         neverCalled();
       });
 
       sut.onEvent(SomeEvent());
+    });
+
+    test('onEvent should not call other listeners after event is cancelled',
+        () {
+      sut.withListener((SomeCancellable event, bloc) {
+        event.cancel();
+      });
+      sut.withListener((SomeCancellable event, bloc) {
+        neverCalled();
+      });
+
+      sut.onEvent(SomeCancellable());
     });
   });
 }
@@ -79,8 +101,8 @@ class TargetState extends TestState {}
 
 class InitialState extends TestState {}
 
-class OtherState extends TestState {}
-
 class SomeEvent extends SolidBlocEvent {}
 
 class OtherEvent extends SolidBlocEvent {}
+
+class SomeCancellable extends SolidBlocEvent with CancelableEvent {}

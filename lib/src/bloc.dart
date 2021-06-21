@@ -1,6 +1,6 @@
 part of solid_bloc;
 
-/// 
+///
 ///
 class SolidBloc extends Bloc<SolidBlocEvent, SolidBlocState> {
   _BlocStateManager _stateManager;
@@ -26,7 +26,8 @@ class SolidBloc extends Bloc<SolidBlocEvent, SolidBlocState> {
     _eventHandler._handleEvent(event);
   }
 
-  void withTransition<E extends SolidBlocEvent, S extends SolidBlocState>(BlocStateMapper<S, E> mapper) {
+  void withTransition<E extends SolidBlocEvent, S extends SolidBlocState>(
+      BlocStateMapper<S, E> mapper) {
     this._stateManager._registerMapper(mapper, mapper.getEventType());
   }
 
@@ -41,6 +42,9 @@ class _BlocStateManager {
 
   SolidBlocState? _mapEventToState(SolidBlocEvent event) {
     Type t = event.runtimeType;
+    // we should not create states for cancelled events.
+    if (event is CancelableEvent && (event as CancelableEvent).isCancelled())
+      return null;
     if (mappers.containsKey(t)) {
       debugPrint(
           "Found event: ${event.runtimeType} and mapped it to the state: ${mappers[t].runtimeType}");
@@ -49,7 +53,8 @@ class _BlocStateManager {
     return null;
   }
 
-  void _registerMapper<S extends SolidBlocState, E extends SolidBlocEvent>(BlocStateMapper<S, E> mapper, Type type) {
+  void _registerMapper<S extends SolidBlocState, E extends SolidBlocEvent>(
+      BlocStateMapper<S, E> mapper, Type type) {
     this.mappers.putIfAbsent(type, () => mapper);
   }
 }
@@ -65,7 +70,8 @@ class _BlocEventHandler {
     if (listeners.containsKey(t)) {
       var list = listeners[t]!;
       for (var listener in list) {
-        if (listener is CancelableEvent && listener.isCancelled()) break;
+        if (event is CancelableEvent &&
+            (event as CancelableEvent).isCancelled()) break;
         listener.call(event, bloc);
       }
     }

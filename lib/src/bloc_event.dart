@@ -1,8 +1,7 @@
 part of solid_bloc;
 
-class SolidBlocEvent extends Equatable {
-  @override
-  List<Object?> get props => [];
+class SolidBlocEvent {
+  
 }
 
 mixin CancelableEvent {
