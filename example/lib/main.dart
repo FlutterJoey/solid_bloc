@@ -13,15 +13,6 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Bloc Example app',
       theme: ThemeData(
-        // This is the theme of your application.
-        //
-        // Try running your application with "flutter run". You'll see the
-        // application has a blue toolbar. Then, without quitting the app, try
-        // changing the primarySwatch below to Colors.green and then invoke
-        // "hot reload" (press "r" in the console where you ran "flutter run",
-        // or simply save your changes to "hot reload" in a Flutter IDE).
-        // Notice that the counter didn't reset back to zero; the application
-        // is not restarted.
         primarySwatch: Colors.blue,
       ),
       home: BlocProvider<BasicIncrementBloc>(
@@ -44,7 +35,6 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-
   void _incrementCounter() {
     // you should not care whether the incrementation is synchronous or not.
     // Any logic handling synchronization should be within your bloc or underlying services.
@@ -55,9 +45,9 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: SolidBlocBuilder<BasicIncrementBloc>(
-        // You must provide a builder for each state!
+        // You must provide a builder for each state, or:
         builders: {
-          // When we encounter a state of type BasicState, we call this event.
+          // When we encounter a state of type BasicState, we call this builder.
           BasicState: (BuildContext context, state) {
             state as BasicState;
             return Container(
@@ -67,6 +57,10 @@ class _MyHomePageState extends State<MyHomePage> {
             );
           }
         },
+        // define a elseBuild method
+        elseBuild: (context, state) {
+          return Container();
+        },
       ),
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.add),
@@ -75,4 +69,3 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 }
-
