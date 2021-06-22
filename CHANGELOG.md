@@ -1,3 +1,6 @@
-## 0.0.1
+## 1.0.0
 
-* TODO: Describe initial release.
+- Add withTransition function to abstract mapEventToState from flutter_bloc
+- Add withListener function to abstract onEvent from flutter_bloc
+- Add Custom Builder as alternative to the flutter_bloc BlocBuilder
+- Add Cancellable Events
