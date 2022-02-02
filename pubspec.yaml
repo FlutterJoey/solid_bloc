@@ -1,7 +1,8 @@
 name: solid_bloc
 description: A new Flutter package project.
 version: 1.0.0
-homepage:
+homepage: "https://github.com/FlutterJoey"
+repository: "https://github.com/FlutterJoey/solid_bloc"
 
 environment:
   sdk: ">=2.12.0 <3.0.0"
